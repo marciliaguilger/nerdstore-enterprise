@@ -4,22 +4,29 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.ConfigureIdentity();
+builder.Services.ConfigureAuthentication(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.ConfigureSwagger();
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => 
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger/json", "v1");
+    });
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
