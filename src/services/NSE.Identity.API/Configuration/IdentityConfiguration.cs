@@ -2,47 +2,37 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using NSE.Identity.API.Data;
 using NSE.Identity.API.Extensions;
 using System.Text;
 
 namespace NSE.Identity.API.Configuration
 {
-    public static class DependencyInjectionConfiguration
+    public static class IdentityConfiguration
     {
-        public static IServiceCollection ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static void AddIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            return services;
-        }
+            services.ConfigureDbContext(configuration);
 
-        public static IServiceCollection ConfigureIdentity(this IServiceCollection services)
-        {
+
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
+                .AddErrorDescriber<IdentityMensagensPortugues>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            return services;
-        }
 
-        public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
+            services.ConfigureAuthentication(configuration);
+
+        }
+        private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSwaggerGen(c =>
-            c.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Title = "Nerdstore Enterprise Identity API",
-                Description = "API construida como parte do curso ASP.NET Core Enterprise Applications",
-                Contact = new OpenApiContact() { Name = "Marcilia da Silva", Email = "guilgerm@gmail.com"},
-                License = new OpenApiLicense() {  Name= "MIT", Url= new Uri("https://opensource.org/licences/MIT")}
-            }));
-            return services;
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         }
 
-        public static IServiceCollection ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
+        private static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             //JWT
-            
+
             var appSettingsSection = configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
@@ -67,10 +57,15 @@ namespace NSE.Identity.API.Configuration
                     ValidAudience = appSettings.ValidoEm,
                     ValidIssuer = appSettings.Emissor
                 };
-                
+
             });
-            return services;
         }
+
+        public static void UseIdentityConfiguration(this IApplicationBuilder app)
+        {
+            app.UseAuthentication();
+            app.UseAuthorization();
+        }
+
     }
 }
-

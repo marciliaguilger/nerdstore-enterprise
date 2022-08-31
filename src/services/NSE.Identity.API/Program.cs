@@ -2,11 +2,8 @@ using NSE.Identity.API.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigureDbContext(builder.Configuration);
-builder.Services.ConfigureIdentity();
-builder.Services.ConfigureAuthentication(builder.Configuration);
-
-builder.Services.AddControllers();
+builder.Services.AddIdentityConfiguration(builder.Configuration);
+builder.Services.AddApiConfiguration();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
 
@@ -26,8 +23,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseIdentityConfiguration();
 
 app.MapControllers();
 
