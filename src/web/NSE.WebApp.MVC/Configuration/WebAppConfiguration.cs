@@ -5,23 +5,24 @@ namespace NSE.WebApp.MVC.Configuration
 {
     public static class WebAppConfiguration
     {
-        public static void AddMvcConfiguration(this IServiceCollection services)
+        public static void AddMvcConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllersWithViews();
+            services.Configure<AppSettings>(configuration);
         }
 
         public static void UseApiConfiguration(this WebApplication app)
         {
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
                 app.UseExceptionHandler("/erro/500");
                 app.UseStatusCodePagesWithRedirects("/erro/{0}");
                 app.UseHsts();
-            }
+            //}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -1,9 +1,29 @@
 ﻿using NSE.WebApp.MVC.Extensions;
+using System.Text.Json;
+using System.Text;
+using Microsoft.Extensions.Options;
+using NSE.WebApp.MVC.Models;
 
 namespace NSE.WebApp.MVC.Services
 {
     public abstract class Service
     {
+        protected StringContent GetContent(object data)
+        {
+            return new StringContent(JsonSerializer.Serialize(data),
+                Encoding.UTF8,
+                "application/json");
+        }
+
+        protected async Task<T> DeserializeResponseObject<T>(HttpResponseMessage responseMessage)
+        {
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+            return JsonSerializer.Deserialize<T>(await responseMessage.Content.ReadAsStringAsync(), options);
+        }
+
+
+
         protected bool TratarErrosResponse(HttpResponseMessage response)
         {
             switch ((int)response.StatusCode)
