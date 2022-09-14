@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NSE.WebApp.MVC.Models;
 using System.Diagnostics;
 
@@ -6,13 +7,6 @@ namespace NSE.WebApp.MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();
@@ -23,10 +17,33 @@ namespace NSE.WebApp.MVC.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("erro/{id:length(3,3)}")]
+        public IActionResult Error(int id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var errorModel = new ErrorViewModel();
+
+            if(id == 500)
+            {
+                errorModel.Mensagem = "Ocorreu um erro. Tente novamente ou contate o suporte";
+                errorModel.Titulo = "Ocorreu um erro";
+                errorModel.ErrorCode = id;
+            }else if (id == 404)
+            {
+                errorModel.Mensagem = "A página que está procurando não existe.";
+                errorModel.Titulo = "Página não encontrada.";
+                errorModel.ErrorCode = id;
+            }else if (id == 403)
+            {
+                errorModel.Mensagem = "Acesso negado";
+                errorModel.Titulo = "Acesso negado";
+                errorModel.ErrorCode = id;
+            }
+            else 
+            {
+                return StatusCode(404);
+            }
+
+            return View("Error", errorModel);
         }
     }
 }
