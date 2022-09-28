@@ -8,8 +8,26 @@
 
 
 	<ItemGroup>
+		<PackageReference Include="microsoft.entityframeworkcore" Version="6.0.9" />
+		<PackageReference Include="microsoft.entityframeworkcore.abstractions" Version="6.0.9" />
+		<PackageReference Include="microsoft.entityframeworkcore.design" Version="6.0.9">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="microsoft.entityframeworkcore.relational" Version="6.0.9" />
+		<PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="6.0.9" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Folder Include="Controllers\" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\building.blocks\NSE.Core\NSE.Core.csproj" />
 	</ItemGroup>
 
 </Project>
