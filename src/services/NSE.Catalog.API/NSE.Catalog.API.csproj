@@ -17,12 +17,7 @@
 		<PackageReference Include="microsoft.entityframeworkcore.relational" Version="6.0.9" />
 		<PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="6.0.9" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-	  <Folder Include="Controllers\" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	</ItemGroup>
 
 
