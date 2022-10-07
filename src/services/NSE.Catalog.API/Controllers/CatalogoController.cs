@@ -23,7 +23,7 @@ namespace NSE.Catalog.API.Controllers
             return await _produtoRepository.ObterTodos();
         }
 
-        [ClaimsAuthorize("catalogo","Ler")]
+        [ClaimsAuthorize("Catalogo","Ler")]
         [HttpGet("catalogo/produtos/{id}")]
         public async Task<Produto> ProdutoDetalhe(Guid id)
         {
