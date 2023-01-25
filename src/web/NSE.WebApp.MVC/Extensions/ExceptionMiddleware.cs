@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Polly.CircuitBreaker;
+using System.Net;
 
 namespace NSE.WebApp.MVC.Extensions
 {
@@ -22,10 +23,14 @@ namespace NSE.WebApp.MVC.Extensions
             {
                 HandleRequestExceptionAsync(httpContext, ex);
             }
-            catch(Exception ex)
+            catch(BrokenCircuitException)
             {
-
+                HandleCircuitBreakerExceptionAsync(httpContext);
             }
+        }
+        private static void HandleCircuitBreakerExceptionAsync(HttpContext context)
+        {
+            context.Response.Redirect("/sistema-indisponivel");
         }
 
         private static void HandleRequestExceptionAsync(HttpContext httpContext, CustomHttpRequestException httpRequestException)
