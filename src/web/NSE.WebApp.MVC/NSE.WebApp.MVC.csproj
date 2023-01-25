@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Catalogo\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Catalogo\Index.cshtml" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map" />

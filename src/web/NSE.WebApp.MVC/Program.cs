@@ -11,4 +11,9 @@ var app = builder.Build();
 
 app.UseApiConfiguration();
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(name: "default", pattern: "{controller=Catalogo}/{action=Index}");
+});
+
 app.Run();
