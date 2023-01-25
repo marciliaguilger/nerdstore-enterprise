@@ -22,6 +22,10 @@ namespace NSE.WebApp.MVC.Extensions
             {
                 HandleRequestExceptionAsync(httpContext, ex);
             }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         private static void HandleRequestExceptionAsync(HttpContext httpContext, CustomHttpRequestException httpRequestException)

@@ -18,17 +18,17 @@ namespace NSE.WebApp.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var produtos = await _catalogoService.ObterTodos();
+
             return View(produtos);
         }
         
         [HttpGet]
         [Route("produto-detalhe/{id}")]
-
         public async Task<IActionResult> ProdutoDetalhe(Guid id)
         {
             var produto = await _catalogoService.ObterPorId(id);
+
             return View(produto);
         }
-
     }
 }
