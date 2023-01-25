@@ -3,7 +3,6 @@ using NSE.WebApp.MVC.Services;
 using NSE.WebApp.MVC.Services.Handlers;
 using NSE.WebApp.MVC.Services.Interfaces;
 using Polly;
-using Polly.Extensions.Http;
 
 namespace NSE.WebApp.MVC.Configuration
 {
@@ -16,24 +15,16 @@ namespace NSE.WebApp.MVC.Configuration
 
             services.AddHttpClient<IAutenticacaoService, AutenticacaoService>();
 
-            //polly resilience police
-            var retryWaitPolice = HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (exception, timeSpan, retryCount, context) => {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine($"Tentendo pela {retryCount} vez");
-                    Console.ForegroundColor = ConsoleColor.White;
-                });
-
             //handler será usado no serviço de catálogo
             services.AddHttpClient<ICatalogoService, CatalogoService>()
                 .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-                .AddPolicyHandler(retryWaitPolice);
+                .AddPolicyHandler(PollyExtensions.EsperarTentar())
+                //o circuit breaker conta todas as requisições de diferentes usuários da aplicação.
+                //a informação fica guardada na máquina de estado internamente 
+                .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();
         }
-
     }
 }
