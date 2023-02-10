@@ -5,14 +5,14 @@ namespace NSE.Customer.API.Models
     public class Cliente : Entity, IAggregateRoot
     {
 
-        public string Nome { get; private set; }
-        public Email Email { get; private set; }
-        public Cpf Cpf { get; private set; }
-        public bool Excluido { get; private set; }
-        public Endereco Endereco { get; private set; }
+        public string Nome { get; private set; } = default!;
+        public Email Email { get; private set; } = default!;
+        public Cpf Cpf { get; private set; } = default!;
+        public bool Excluido { get; private set; } = default!;
+        public Endereco Endereco { get; private set; } = default!;
 
 
-        public Cliente(Guid id, string nome, string email, string cpf, bool excluido, Endereco endereco)
+        public Cliente(Guid id, string nome, string email, string cpf)
         {
             Id = id;
             Nome = nome;
@@ -21,7 +21,7 @@ namespace NSE.Customer.API.Models
             Excluido = false;
         }
         //EF Core
-        protected Cliente() {}
+        protected Cliente() {} 
 
         public void TrocarEmail(string email)
         {
