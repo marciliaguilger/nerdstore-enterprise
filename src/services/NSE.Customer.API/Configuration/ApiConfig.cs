@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation.Results;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using NSE.Core.Mediator;
+using NSE.Customer.API.Application.Commands;
 using NSE.Customer.API.Data;
 
 namespace NSE.Customer.API.Configuration
@@ -19,6 +23,12 @@ namespace NSE.Customer.API.Configuration
                             .AllowAnyMethod()
                             .AllowAnyHeader());
             });
+        }
+
+        public static void RegisterServices(this IServiceCollection services)
+        {
+            services.AddScoped<IMediatorHandler, MediatorHandler>();
+            services.AddScoped<IRequestHandler<RegistrarClienteCommand, ValidationResult>, ClienteCommandHandler>();
         }
 
     }
