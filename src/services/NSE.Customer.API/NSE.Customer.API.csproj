@@ -23,7 +23,8 @@
 
 
 	<ItemGroup>
-	  <Folder Include="Application\" />
+	  <Folder Include="Application\Events\" />
+	  <Folder Include="Application\Queries\" />
 	  <Folder Include="Controllers\" />
 	  <Folder Include="Services\" />
 	</ItemGroup>
