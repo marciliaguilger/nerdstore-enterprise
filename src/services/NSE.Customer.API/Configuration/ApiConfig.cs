@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NSE.Core.Mediator;
 using NSE.Customer.API.Application.Commands;
 using NSE.Customer.API.Data;
+using NSE.Customer.API.Data.Repository;
 
 namespace NSE.Customer.API.Configuration
 {
@@ -29,6 +30,9 @@ namespace NSE.Customer.API.Configuration
         {
             services.AddScoped<IMediatorHandler, MediatorHandler>();
             services.AddScoped<IRequestHandler<RegistrarClienteCommand, ValidationResult>, ClienteCommandHandler>();
+
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<ClientesContext>();
         }
 
     }

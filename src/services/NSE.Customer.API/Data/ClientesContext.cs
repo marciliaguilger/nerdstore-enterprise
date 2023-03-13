@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using NSE.Core.Data;
 using NSE.Customer.API.Models;
 using System.ComponentModel.DataAnnotations;
@@ -21,7 +20,6 @@ namespace NSE.Customer.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Ignore<ValidationResult>();
-            //modelBuilder.Ignore<Event>();
 
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
@@ -36,10 +34,7 @@ namespace NSE.Customer.API.Data
 
         public async Task<bool> Commit()
         {
-            var sucesso = await SaveChangesAsync() > 0;
-            //if (sucesso) await _mediatorHandler.PublicarEventos(this);
-
-            return sucesso;
+           return await SaveChangesAsync() > 0;
         }
     }
 }

@@ -1,12 +1,20 @@
 ﻿using FluentValidation.Results;
 using MediatR;
 using NSE.Core.Messages;
+using NSE.Customer.API.Data.Repository;
 using NSE.Customer.API.Models;
 
 namespace NSE.Customer.API.Application.Commands
 {
     public class ClienteCommandHandler : CommandHandler, IRequestHandler<RegistrarClienteCommand, ValidationResult>
     {
+        private readonly IClienteRepository _clienteRepository;
+
+        public ClienteCommandHandler(IClienteRepository clienteRepository)
+        {
+            _clienteRepository = clienteRepository;
+        }
+
         public async Task<ValidationResult> Handle(RegistrarClienteCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid())
@@ -14,16 +22,17 @@ namespace NSE.Customer.API.Application.Commands
 
             var cliente = new Cliente(message.Id, message.Nome, message.Email, message.Cpf);
 
-            //validações de negócio
-            //persistir no banco
+            var clienteExiste = _clienteRepository.GetByCpf(cliente.Cpf.Numero);
 
-            //validar se o cliente existe no banco
-            if (true)
+            if (clienteExiste != null)
             {
                 AddError("Cliente já cadastrado");
                 return ValidationResult;
             }
-            return message.ValidationResult;
+
+            _clienteRepository.AddCustomer(cliente);
+
+            return await PersistData(_clienteRepository.UnitOfWork);
         }
     }
 }
