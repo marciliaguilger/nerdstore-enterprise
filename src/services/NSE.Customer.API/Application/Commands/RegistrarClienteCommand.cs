@@ -1,4 +1,5 @@
 ﻿using NSE.Core.Messages;
+using NSE.Customer.API.Application.Commands.Validation;
 
 namespace NSE.Customer.API.Application.Commands
 {
@@ -11,6 +12,12 @@ namespace NSE.Customer.API.Application.Commands
             Nome = nome;
             Email = email;
             Cpf = cpf;
+        }
+
+        public override bool IsValid()
+        {
+            ValidationResult = new RegistrarClienteValidation().Validate(this);
+            return ValidationResult.IsValid;
         }
 
         public Guid Id { get; private set; }
